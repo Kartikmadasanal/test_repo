@@ -2,7 +2,7 @@ import express from "express";
 import TelegramBot from "node-telegram-bot-api";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const token = '7512867048:AAFDxc8EhxcQGffDHI-xjjYvw1P3_WQUVzE';
 
 const bot = new TelegramBot(token, {polling: true});
