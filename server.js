@@ -27,6 +27,7 @@ app.post("/iot", (req, res) => {
             res.send(`Message sent: ${message}`);
         })
         .catch((err) => {
+            console.log(err)
             res.status(500).send(`Failed to send message: ${err.message}`);
         });
 });
