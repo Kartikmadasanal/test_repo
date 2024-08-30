@@ -15,7 +15,24 @@ const token = '7512867048:AAFDxc8EhxcQGffDHI-xjjYvw1P3_WQUVzE';
 
 const bot = new TelegramBot(token, {polling: true});
 
-app.post("/iot", (req, res) => {
+app.post("/iotp", (req, res) => {
+
+    console.log(req.body);
+    
+    const message = `Received coordinates: Latitude = ${req.body.Latitude}, Longitude = ${req.body.Longitude}`;
+    
+    // Send message to the specified Telegram user or group
+    bot.sendMessage('@jcernew', message)
+        .then(() => {
+            res.send(`Message sent: ${message}`);
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).send(`Failed to send message: ${err.message}`);
+        });
+});
+
+app.get("/iotg", (req, res) => {
 
     console.log(req.body);
     
