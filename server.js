@@ -17,7 +17,11 @@ const bot = new TelegramBot(token, {polling: true});
 
 app.get("/", (req, res) => {
 
-    res.json("hello");
+    res.json("hello this get");
+});
+app.post("/", (req, res) => {
+
+    res.json("hello this is post");
 });
 app.post("/iotp", (req, res) => {
 
