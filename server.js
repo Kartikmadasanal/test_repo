@@ -15,6 +15,10 @@ const token = '7512867048:AAFDxc8EhxcQGffDHI-xjjYvw1P3_WQUVzE';
 
 const bot = new TelegramBot(token, {polling: true});
 
+app.get("/", (req, res) => {
+
+    res.json("hello");
+});
 app.post("/iotp", (req, res) => {
 
     console.log(req.body);
