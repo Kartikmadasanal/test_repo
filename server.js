@@ -1,63 +1,42 @@
 
 
-
-
-import express from "express";
-import bodyParser from "body-parser"
-
-import TelegramBot from "node-telegram-bot-api";
+const express = require('express');
+const bodyParser = require('body-parser');
+const io = require("socket.io-client");
+const socket = io("wait");
 
 const app = express();
+const PORT = 3000;
+
+// Parse URL-encoded data (application/x-www-form-urlencoded)
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const port = process.env.PORT || 3000;
-const token = '7783621581:AAGc-KnO6_W9RZrZhEGjk8BCAZPQrXRYBNc';
-
-const bot = new TelegramBot(token, {polling: true});
-
-app.get("/", (req, res) => {
-
-    res.json("hello this get");
-});
-app.post("/", (req, res) => {
-
-    res.json("hello this is post");
-});
-app.post("/iotp", (req, res) => {
-
-    console.log(req.body);
-    
-    const message = `Received coordinates: Latitude = ${req.body.Latitude}, Longitude = ${req.body.Longitude}`;
-    
-    // Send message to the specified Telegram user or group
-    bot.sendMessage('@jcernew', message)
-        .then(() => {
-            res.send(`Message sent: ${message}`);
-        })
-        .catch((err) => {
-            console.log(err)
-            res.status(500).send(`Failed to send message: ${err.message}`);
-        });
+// Endpoint similar to Telegram's /sendMessage
+app.post('/sendCoordinets', (req, res) => {
+  const LatitudeData = req.body.Latitude;
+  const longitudeData = req.body.longitude;
+  const Device_Id = req.body.Device_Id;
+  if (LatitudeData && longitudeData && Device_Id) {
+    // Here you can handle the message, for example, log it or send a response back
+    console.log(`Message received ${LatitudeData}: ${longitudeData} for ${Device_Id}`);
+    socket.emit("updateLocation", {
+      Device_Id,
+      latitude: LatitudeData,
+      longitude: longitudeData
+    });
+    // Respond with a JSON object similar to Telegram's response format
+    res.json("sent");
+  } else {
+    // Respond with an error if parameters are missing
+    res.status(400).json({
+      ok: false,
+      error_code: 400,
+      description: "Bad Request: chat_id and text are required"
+    });
+  }
 });
 
-app.get("/iotg", (req, res) => {
-
-    console.log(req.body);
-    
-    const message = `Received coordinates: Latitude = ${req.body.Latitude}, Longitude = ${req.body.Longitude}`;
-    
-    // Send message to the specified Telegram user or group
-    bot.sendMessage('@jcernew', message)
-        .then(() => {
-            res.send(`Message sent: ${message}`);
-        })
-        .catch((err) => {
-            console.log(err)
-            res.status(500).send(`Failed to send message: ${err.message}`);
-        });
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on ${PORT}`);
 });
-
-app.listen(port, () => {
-    console.log("Server is listening on port " + port);
-});
-
