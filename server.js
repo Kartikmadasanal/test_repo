@@ -11,7 +11,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
-const token = '7512867048:AAFDxc8EhxcQGffDHI-xjjYvw1P3_WQUVzE';
+const token = '7783621581:AAGc-KnO6_W9RZrZhEGjk8BCAZPQrXRYBNc';
 
 const bot = new TelegramBot(token, {polling: true});
 
